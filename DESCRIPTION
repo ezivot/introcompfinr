@@ -1,0 +1,25 @@
+Package: introcompfinr
+Title: Functions used in Introduction to Computational Finance and Financial Econometrics With R
+Version: 0.0.0.9000
+Authors@R: 
+    person("Eric", "Zivot", , "ezivot@uw.edu", role = c("aut", "cre"))
+Description: This package accompanies the book Introduction to Computational Finance 
+    and Financial Econometrics with R. The package contains all of the data for the 
+    book example as well as functions to estimate simple models for asset returns,
+    implement mean-variance portfolio theory with and without short-sales constraints,
+    and perform asset and portfolio risk analytics.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+Imports: 
+    corrplot,
+    matrixStats,
+    quadprog,
+    xts,
+    zoo
+Suggests:
+    PerformanceAnalytics
+Depends: 
+    R (>= 3.5)
+LazyData: true
+Config/roxygen2/version: 8.1.0
