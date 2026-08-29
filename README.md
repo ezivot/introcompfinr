@@ -35,8 +35,8 @@ the table below:
 
 | **Function** | **Description** |
 |:---|:---|
-| `getPortfolio` | create portfolio object |
-| `globalMin.portfolio` | compute global minimum variance portfolio |
-| `efficient.portfolio` | compute minimum variance portfolio subject to target return |
-| `tangency.portfolio` | compute tangency portfolio |
-| `efficient.frontier` | compute efficient frontier of risky assets |
+| `get_portfolio` | create portfolio object |
+| `globalmin_portfolio` | compute global minimum variance portfolio |
+| `efficient_portfolio` | compute minimum variance portfolio subject to target return |
+| `tangency_portfolio` | compute tangency portfolio |
+| `efficient_frontier` | compute efficient frontier of risky assets |

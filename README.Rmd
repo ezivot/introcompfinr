@@ -44,14 +44,14 @@ in the table below:
 ------------------------------------------------------------------------------------------
 **Function**                **Description**
 ------------------------    --------------------------------------------------------------
-`getPortfolio`              create portfolio object 
+`get_portfolio`             create portfolio object 
   
-`globalMin.portfolio`       compute global minimum variance portfolio 
+`globalmin_portfolio`       compute global minimum variance portfolio 
   
-`efficient.portfolio`       compute minimum variance portfolio subject to target return 
+`efficient_portfolio`       compute minimum variance portfolio subject to target return 
   
-`tangency.portfolio`        compute tangency portfolio 
+`tangency_portfolio`        compute tangency portfolio 
   
-`efficient.frontier`        compute efficient frontier of risky assets 
+`efficient_frontier`        compute efficient frontier of risky assets 
 ------------------------------------------------------------------------------------------
 
