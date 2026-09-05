@@ -20,6 +20,7 @@ export(efficient_portfolio)
 export(estimate_gwn_model)
 export(estimate_sr)
 export(estimate_var)
+export(four_panel_plot)
 export(get_portfolio)
 export(globalmin_portfolio)
 export(risk_report)
@@ -28,16 +29,22 @@ importFrom(graphics,
   barplot,
   boxplot,
   hist,
+  legend,
+  lines,
+  par,
   text
 )
 importFrom(stats,
   acf,
   cor,
   cov,
+  density,
+  dnorm,
   qnorm,
   qqline,
   qqnorm,
   quantile,
+  sd,
   setNames,
   var
 )
