@@ -65,9 +65,9 @@ tangency_portfolio <-
     #
     if(risk_free < 0)
       stop("Risk-free rate must be positive")
-    er <- as.vector(er)
+    er_vec <- as.vector(er_vec)
     cov_mat <- as.matrix(cov_mat)
-    N <- length(er)
+    N <- length(er_vec)
     if(N != nrow(cov_mat))
       stop("invalid inputs")
     if(any(diag(chol(cov_mat)) <= 0))
@@ -89,7 +89,7 @@ tangency_portfolio <-
     #
     if(shorts==TRUE){
       cov_mat_inv <- solve(cov_mat)
-      w_t <- cov_mat_inv %*% (er - risk_free) # tangency portfolio
+      w_t <- cov_mat_inv %*% (er_vec - risk_free) # tangency portfolio
       w_t <- as.vector(w_t/sum(w_t))          # normalize weights
     } else if(shorts==FALSE){
       Dmat <- 2*cov_mat
