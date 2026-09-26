@@ -53,11 +53,11 @@ implemented in the package.
 The functions for estimating risk and performance measures summarized in
 the table below:
 
-| **Function**      | **Description**                                |
-|:------------------|:-----------------------------------------------|
-| `estimate_var`    | Estimate value at risk (VaR) for asset returns |
-| `estimate_sr`     | Estimate Sharpe ratio (SR) for asset returns   |
-| \`risk_report\`\` | Estimate portfolio risk report                 |
+| **Function**   | **Description**                                |
+|:---------------|:-----------------------------------------------|
+| `estimate_var` | Estimate value at risk (VaR) for asset returns |
+| `estimate_sr`  | Estimate Sharpe ratio (SR) for asset returns   |
+| `risk_report`  | Estimate portfolio risk report                 |
 
 ## Portfolio analysis and risk management functions
 

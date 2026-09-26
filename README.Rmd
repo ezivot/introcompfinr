@@ -67,7 +67,7 @@ The functions for estimating risk and performance measures summarized in the tab
   
 `estimate_sr`               Estimate Sharpe ratio (SR) for asset returns
   
-`risk_report``              Estimate portfolio risk report 
+`risk_report`               Estimate portfolio risk report 
 ------------------------------------------------------------------------------------------
 
 
