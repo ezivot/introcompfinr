@@ -1,0 +1,234 @@
+---
+title: "Portfolio Functions"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{portfolio-functions}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+options(digits=3)
+```
+
+This vignette illustrates the portfolio analysis functions in the **introcompfinr** package. The vignette is based on Chapter 11 of *Introduction to Computational Finance and Financial Econometrics with R* by Eric Zivot.
+
+```{r setup}
+library(introcompfinr)
+```
+
+## Portfolio Analysis Functions in R 
+The package **introcompfinr** contains a few R functions for
+computing Markowitz mean-variance efficient portfolios allowing for
+short sales using matrix algebra computations. These functions allow
+for the easy computation of the global minimum variance portfolio,
+an efficient portfolio with a given target expected return, the tangency
+portfolio, and the efficient frontier. These functions are summarized
+in Table below.
+
+------------------------------------------------------------------------------------------
+**Function**                **Description**
+------------------------    --------------------------------------------------------------
+`get_portfolio`             create portfolio object 
+  
+`globalmin_portfolio`       compute global minimum variance portfolio 
+  
+`efficient_portfolio`       compute minimum variance portfolio subject to target return 
+  
+`tangency_portfolio`        compute tangency portfolio 
+  
+`efficient_frontier`        compute efficient frontier of risky assets 
+------------------------------------------------------------------------------------------
+
+
+
+
+The following examples illustrate the use of the functions in listed in the table
+with example data from Chapter 11 of *Introduction to Computational Finance and Financial Econometrics with R*. 
+
+```{r echo=TRUE}
+asset.names <- c("MSFT", "NORD", "SBUX")
+mu.vec = c(0.0427, 0.0015, 0.0285)
+sigma.mat = matrix(c(0.0100, 0.0018, 0.0011,
+           0.0018, 0.0109, 0.0026,
+           0.0011, 0.0026, 0.0199),
+         nrow=3, ncol=3)
+r.f=0.005
+```
+
+To specify a `portfolio` object, you need an expected
+return vector $\boldsymbol{\mu}$ and covariance matrix $\boldsymbol{\Sigma}$ for the assets under consideration
+as well as a vector of portfolio weights $\mathbf{x}$. To create an equally weighted
+portfolio use:
+
+```{r echo=TRUE}
+
+ew = rep(1,3)/3
+equalWeight.portfolio = get_portfolio(er_vec=mu.vec,cov_mat=sigma.mat,weight_vec=ew)
+class(equalWeight.portfolio)
+```
+
+Portfolio objects have the following components:
+
+```{r echo=TRUE}
+
+names(equalWeight.portfolio)
+```
+
+There are `print()`, `summary()` and `plot()`
+methods for portfolio objects. The `print()` method gives:
+
+```{r echo=TRUE}
+
+equalWeight.portfolio
+```
+
+The `plot()` method shows a bar chart of the portfolio weights:
+
+```{r PortMatrixPlotMethod, fig.cap='Plot method for objects of class portfolio', out.width='70%', fig.width = 6, fig.asp=.618, fig.align='center', echo=TRUE}
+
+plot(equalWeight.portfolio, col="cornflowerblue")
+```
+
+
+The resulting plot is shown in Figure \@ref(fig:PortMatrixPlotMethod).
+The global minimum variance portfolio (allowing for short sales) $\mathbf{m}$
+solves the optimization problem 
+
+$$
+\min_{\mathbf{m}}~\sigma_{p,m}^{2}=\mathbf{m^{\prime}{\Sigma} m} ~ s.t. ~ \mathbf{m^{\prime}1}=1.
+$$
+
+and is computed using 
+
+$$
+\mathbf{m}= \frac{\boldsymbol{\Sigma}^{-1}\mathbf{1}}{\mathbf{1}^{\prime}{\boldsymbol{\Sigma}}^{-1}\mathbf{1}}.
+$$
+To compute this portfolio use the function `globalmin_portfolio()`:
+
+```{r echo=TRUE}
+
+gmin.port = globalmin_portfolio(mu.vec, sigma.mat)
+class(gmin.port)
+gmin.port
+```
+
+A mean-variance efficient portfolio $\mathbf{x}$ that achieves the
+target expected return $\mu_{0}$ solves the optimization problem
+
+$$
+\begin{aligned}
+\min_{\mathbf{x}}~\sigma_{p,x}^{2} & =\mathbf{x}^{\prime}\boldsymbol{\Sigma} \mathbf{x} \\
+\textrm{ s.t.  } \mu_{p} & =\mathbf{x}^{\prime}\boldsymbol{\mu}=\mu_{p,0}\mathbf{,}\textrm{ and }\mathbf{x}^{\prime}\mathbf{1}=1. 
+\end{aligned}
+$$
+
+and is computed by solving the system of linear equations $\mathbf{Az}_{x}\mathbf{=b}_{0}$, where 
+$$
+\mathbf{A}=\left(\begin{array}{ccc}
+2\boldsymbol{\Sigma} & \boldsymbol{\mu} & \mathbf{1}\\
+\boldsymbol{\mu}^{\prime} & 0 & 0\\
+\mathbf{1}^{\prime} & 0 & 0
+\end{array}\right),~\mathbf{z}_{x}=\left(\begin{array}{c}
+\mathbf{x}\\
+\lambda_{1}\\
+\lambda_{2}
+\end{array}\right)\textrm{ and }\mathbf{b}_{0}=\left(\begin{array}{c}
+\mathbf{0}\\
+\mu_{p,0}\\
+1
+\end{array}\right).
+$$
+The solution for $\mathbf{z}_{x}$ is: 
+$$
+\mathbf{z}_{x}=\mathbf{A}^{-1}\mathbf{b}_{0}.
+$$
+The first $N$ elements of $\mathbf{z}_{x}$ are the portfolio weights
+$\mathbf{x}$ for the minimum variance portfolio with expected return
+$\mu_{p,x}=\mu_{p,0}$. If $\mu_{p,0}$ is greater than or equal to
+the expected return on the global minimum variance portfolio, then
+$\mathbf{x}$ is an efficient (frontier) portfolio. Otherwise, it
+is an inefficient (frontier) portfolio. 
+
+
+To compute this portfolio for the target expected return $\mu_{0}=E[R_{\textrm{msft}}]=0.0427$
+use the `efficient_portfolio()` function:
+
+```{r echo=TRUE}
+
+target.return = mu.vec[1]
+e.port.msft = efficient_portfolio(mu.vec, sigma.mat, target.return)
+class(e.port.msft)
+e.port.msft
+```
+
+The tangency portfolio $\mathbf{t}$ is the portfolio of risky assets
+with the highest Sharpe's slope and has solutions given by
+
+$$
+\mathbf{t}=\frac{\boldsymbol{\Sigma}^{-1}(\boldsymbol{\mu}-r_{f}\cdot\mathbf{1})}{\mathbf{1}^{\prime}\boldsymbol{\Sigma}^{-1}(\boldsymbol{\mu}-r_{f}\cdot\mathbf{1})}.
+$$
+
+To compute this portfolio with $r_{f}=0.005$ use the `tangency_portfolio()`
+function:
+
+```{r echo=TRUE}
+
+tan.port = tangency_portfolio(mu.vec, sigma.mat, r.f)
+class(tan.port)
+tan.port
+```
+
+The the set of efficient portfolios of risky assets can be computed
+as a convex combination of any two efficient portfolios. It is convenient
+to use the global minimum variance portfolio as one portfolio and
+an efficient portfolio with target expected return equal to the maximum
+expected return of the assets under consideration as the other portfolio.
+Call these portfolios $\mathbf{m}$ and $\mathbf{x}$, respectively.
+For any number $\alpha$, another efficient portfolio can be computed
+as: 
+$$
+\mathbf{z}=\alpha\mathbf{x}+(1-\alpha)\mathbf{m}
+$$
+The function `efficient_frontier()` constructs the set of efficient
+portfolios using this method for a collection of $\alpha$ values
+on an equally spaced grid between $\alpha_{min}$ and $\alpha_{max}$.
+For example, to compute 20 efficient portfolios for values of $\alpha$
+between -2 and 1.5 use:
+
+```{r echo=TRUE}
+
+ef = efficient_frontier(mu.vec, sigma.mat, alpha_min=-0.5, 
+                        alpha_max=2, nport=20)
+attributes(ef)
+ef
+```
+
+Use the `summary()` method to show the weights of these portfolios.
+Use the `plot()` method to create a simple plot the efficient
+frontier:
+
+```{r PortMatrixMarkowitzPlotMethod, fig.cap='Plot method for objects of class Markowitz', out.width='70%', fig.width = 6, fig.asp=.618, fig.align='center', echo=TRUE}
+
+plot(ef)
+```
+
+
+The resulting plot is shown in the figure above. To create a more elaborate plot of the efficient frontier showing
+the original assets and the tangency portfolio use:
+
+```{r PortMatrixEfficientFrontierPlot, fig.cap='Efficient frontier plot.', out.width='70%', fig.width = 6, fig.asp=.618, fig.align='center', echo=TRUE}
+
+plot(ef, plot.assets=T, col="blue", pch=16) 
+points(gmin.port$sd_port, gmin.port$er_port, col="green", pch=16, cex=1.5) 
+text(gmin.port$sd_port, gmin.port$er_port, labels = "Global min", pos = 4) 
+points(tan.port$sd_port, tan.port$er_port, col="red", pch=16, cex=1.5) 
+text(tan.port$sd_port, tan.port$er_port, labels = "Tangency", pos = 3) 
+sr.tan = (tan.port$er_port - r.f)/tan.port$sd_port 
+abline(a=r.f, b=sr.tan, col="green", lwd=2)
+```
+
