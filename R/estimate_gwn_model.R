@@ -208,20 +208,19 @@ print.gwn_model <- function(x, ...) {
 summary.gwn_model <-
   function(object, show_correlations=FALSE, ...)
   {
-    # To-do: add summary for covariances and correlations
     # compute approx 95% confidence interval for mean and volatility estimates
     lower_muhat = object$muhat - 2*object$se_muhat
     upper_muhat = object$muhat + 2*object$se_muhat
-    width_muhat = upper_muhat - lower_muhat
+    # width_muhat = upper_muhat - lower_muhat
 
     lower_sigmahat = object$sigmahat - 2*object$se_sigmahat
     upper_sigmahat = object$sigmahat + 2*object$se_sigmahat
-    width_sigmahat = upper_sigmahat - lower_sigmahat
+    # width_sigmahat = upper_sigmahat - lower_sigmahat
 
-    ans = cbind(object$muhat, object$se_muhat, lower_muhat, upper_muhat, width_muhat,
-                 object$sigmahat, object$se_sigmahat, lower_sigmahat, upper_sigmahat, width_sigmahat)
-    colnames(ans) = c("Mean", "Std Error", "2.5%", "97.5%", "Width",
-                      "Volatility", "Std Error", "2.5%", "97.5%", "Width")
+    ans = cbind(object$muhat, object$se_muhat, lower_muhat, upper_muhat,
+                 object$sigmahat, object$se_sigmahat, lower_sigmahat, upper_sigmahat)
+    colnames(ans) = c("Mean", "Std Error", "2.5%", "97.5%",
+                      "Volatility", "Std Error", "2.5%", "97.5%")
     rownames(ans) = colnames(object$ehat)
 
     cat("Call:\n")
@@ -238,9 +237,8 @@ summary.gwn_model <-
       ans_corr = cbind(object$rhohat, object$se_rhohat)
       lower_rhohat  = object$rhohat - 2*object$se_rhohat
       upper_rhohat  = object$rhohat + 2*object$se_rhohat
-      width_rhohat  = upper_rhohat - lower_rhohat
-      ans_corr = cbind(ans_corr, lower_rhohat, upper_rhohat,
-                       width_rhohat)
+      # width_rhohat  = upper_rhohat - lower_rhohat
+      ans_corr = cbind(ans_corr, lower_rhohat, upper_rhohat)
       colnames(ans_corr) = c("Correlation", "Std Error", "2.5%",
                              "97.5%", "Width")
       cat("\nEstimated pairwise correlations:\n")

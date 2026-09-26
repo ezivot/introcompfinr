@@ -8,7 +8,6 @@
 #' investment over a one-month period is interpreted as "there is a 5% chance that the portfolio will lose
 #' VaR *or more* over the next month."
 #'
-#'
 #' Normal VaR for simple returns is estimated using the formula the left-tail \eqn{\alpha}-quantile
 #' of a normal distribution:
 #' \deqn{\widehat{\mathrm{VaR}}_{\alpha} = -(\hat{\mu} + \hat{\sigma} \times z_{\alpha})\times w,}
