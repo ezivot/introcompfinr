@@ -240,7 +240,7 @@ summary.gwn_model <-
       # width_rhohat  = upper_rhohat - lower_rhohat
       ans_corr = cbind(ans_corr, lower_rhohat, upper_rhohat)
       colnames(ans_corr) = c("Correlation", "Std Error", "2.5%",
-                             "97.5%", "Width")
+                             "97.5%")
       cat("\nEstimated pairwise correlations:\n")
       print(round(ans_corr,4), ...)
 
